@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Portal - NeuroXAI Care</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="header-container">
+        <img src="{{ url_for('static', filename='L.PNG') }}" class="brand-logo">
+        <a href="/patient/login" class="nav-link logout-link">Logout</a>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner-modern diagnostic-banner">
+        <h2>Welcome, {{ record[2] }} 👋</h2>
+        <p>Your latest diagnostic report is displayed below.</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <!-- Patient Info -->
+        <div class="card">
+            <h3>Personal Information</h3>
+            <p><strong>Name:</strong> {{ record[2] }}</p>
+            <p><strong>Age:</strong> {{ record[3] }}</p>
+            <p><strong>Doctor:</strong> Dr. {{ record[4] }}</p>
+            <p><strong>Date:</strong> {{ record[11] }}</p>
+        </div>
+
+        <!-- Diagnosis -->
+        <div class="card">
+            <h3>Diagnosis Result</h3>
+
+            {% if record[5] == 'Patient' %}
+                <span class="pill pill-patient">Patient</span>
+            {% else %}
+                <span class="pill pill-healthy">Healthy</span>
+            {% endif %}
+
+            <div style="margin-top:1rem;">
+                <p><strong>Confidence:</strong> {{ "%.1f"|format(record[6]) }}%</p>
+
+                <div class="confidence-bar-bg">
+                    <div class="confidence-bar-fill 
+                        {% if record[6] < 60 %}low{% else %}high{% endif %}"
+                        style="--progress-width: {{ record[6] }}%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<div class="dashboard-grid" style="margin-top:1.5rem;">
+
+    {% if shap_plot %}
+    <div class="card">
+        <h3>Feature Contribution</h3>
+        <img src="data:image/png;base64,{{ shap_plot }}" class="medical-chart-small">
+    </div>
+    {% endif %}
+
+    {% if comparison_plot %}
+    <div class="card">
+        <h3>Patient vs Healthy Comparison</h3>
+        <img src="data:image/png;base64,{{ comparison_plot }}" class="medical-chart-small">
+    </div>
+    {% endif %}
+
+</div>
+    <!-- Doctor Feedback -->
+    {% if record[9] %}
+    <div class="card" style="margin-top:1.5rem;">
+        <h3>Doctor’s Feedback</h3>
+        <p>{{ record[9] }}</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<footer class="main-footer">
+    <div class="footer-content">
+        <p class="copyright">
+            &copy; 2026 NeuroXAI Care. Advanced Neurological Diagnostics.
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

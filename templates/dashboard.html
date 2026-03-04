@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NeuroXAI Care</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Google Fonts for Medical Professionalism -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* إصلاح تداخل العناصر في البانر لضمان التنسيق الصحيح */
+        .welcome-content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .welcome-text {
+            flex: 1;
+            min-width: 280px; /* يضمن وجود مساحة للنص قبل النزول لسطر جديد */
+        }
+
+        .banner-actions {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* تحسين استجابة الجوال لمنع أي تداخل مستقبلي */
+        @media (max-width: 768px) {
+            .welcome-content-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .banner-actions {
+                width: 100%;
+            }
+            .banner-actions .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* تنسيق خاص لشريط الثقة لتجنب أخطاء محرر الأكواد */
+        .confidence-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color, #0a66c2);
+            width: var(--progress-width, 0%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body class="clinical-page">
+
+    <header class="main-header">
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='L.PNG') }}" alt="NeuroXAI Logo" class="brand-logo">
+            <nav class="main-nav">
+                <a href="{{ url_for('dashboard') }}" class="nav-link active">🏠 Dashboard</a>
+                <a href="{{ url_for('index') }}" class="nav-link">🔬 New Diagnosis</a>
+                <a href="{{ url_for('patient_history') }}" class="nav-link">📋 Patient History</a>
+                <a href="{{ url_for('about') }}" class="nav-link">ℹ️ About</a>
+                <a href="{{ url_for('logout') }}" class="nav-link logout-link">🚪 Logout</a>
+            </nav>
+            <button class="mode-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                <span class="icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="clinical-content">
+        <div class="container">
+            
+            <!-- Welcome Banner (Fixed Layout to prevent overlap) -->
+            <section class="welcome-banner-modern">
+                <div class="welcome-content-wrapper">
+                    <div class="welcome-text">
+                        <h1>Welcome back, Dr. {{ doctor }}! 👋</h1>
+                        <p class="subtitle">Clinical practice overview and diagnostic summary for today.</p>
+                    </div>
+                    <div class="banner-actions">
+                        <a href="{{ url_for('index') }}" class="btn-primary">
+                            <span>➕ New Assessment</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Grid -->
+            <div class="dashboard-grid">
+                <div class="stat-card blue">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3>Total Patients</h3>
+                        <div class="stat-value">{{ total_patients }}</div>
+                        <p>Cumulative cases</p>
+                    </div>
+                </div>
+
+                <div class="stat-card green">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <h3>Today's Workload</h3>
+                        <div class="stat-value">{{ patients_today }}</div>
+                        <p>Assessments completed</p>
+                    </div>
+                </div>
+
+                <div class="stat-card teal">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3>Healthy</h3>
+                        <div class="stat-value">{{ diagnosis_counts.get('Healthy', 0) }}</div>
+                        <p>Normal results</p>
+                    </div>
+                </div>
+
+                <div class="stat-card red">
+                    <div class="stat-icon">🚨</div>
+                    <div class="stat-info">
+                        <h3>At-Risk</h3>
+                        <div class="stat-value">{{ diagnosis_counts.get('Patient', 0) }}</div>
+                        <p>Attention required</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Table -->
+            <section class="card data-section">
+                <div class="section-header">
+                    <h2>📌 Recent Assessments</h2>
+                    <a href="{{ url_for('patient_history') }}" class="text-link">View History →</a>
+                </div>
+                
+                <div class="table-responsive">
+                    {% if recent_patients %}
+                    <table class="medical-table">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>AI Result</th>
+                                <th>Confidence</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in recent_patients %}
+                            <tr>
+                                <td><span class="id-badge">{{ patient[0] }}</span></td>
+                                <td class="patient-name-cell">{{ patient[1] }}</td>
+                                <td>{{ patient[2] }}</td>
+                                <td>
+                                    <span class="pill {{ 'pill-healthy' if patient[3] == 'Healthy' else 'pill-patient' }}">
+                                        {{ patient[3] }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="confidence-cell-wrapper">
+                                        <div class="confidence-bar-bg small">
+                                            <!-- Fixed: Using CSS variable to avoid VS Code parser errors -->
+                                            <div class="confidence-bar-fill" style="--progress-width: {{ patient[4] }}%;"></div>
+                                        </div>
+                                        <span class="conf-text">{{ "%.1f"|format(patient[4]) }}%</span>
+                                    </div>
+                                </td>
+                                <td class="date-cell-text">{{ patient[5] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty-state-dashboard">
+                        <p>No recent assessments. Use the "New Assessment" button to begin.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>Clinical Support:</h3>
+                <a href="mailto:support@neuroxai.care" class="contact-link">support@neuroxai.care</a>
+            </div>
+            <p class="copyright">&copy; 2026 NeuroXAI Care. Secured Clinical Analytics Portal.</p>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function updateToggleIcon(isDark) {
+            const icon = themeToggle.querySelector('.icon');
+            if (icon) icon.textContent = isDark ? "☀️" : "🌙";
+        }
+
+        function toggleMode() {
+            body.classList.toggle("dark-mode");
+            const isDark = body.classList.contains("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            updateToggleIcon(isDark);
+        }
+
+        themeToggle.addEventListener('click', toggleMode);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                body.classList.add("dark-mode");
+                updateToggleIcon(true);
+            }
+        });
+    </script>
+</body>
+</html>

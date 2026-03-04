@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Login - NeuroXAI Care</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-page">
+
+<header class="main-header">
+    <div class="header-container">
+        <img src="{{ url_for('static', filename='L.PNG') }}" class="brand-logo">
+    </div>
+</header>
+
+<main class="auth-container">
+    <section class="auth-card">
+        <div class="auth-header">
+            <h2>Patient Portal</h2>
+            <p>Access your diagnosis and medical report</p>
+        </div>
+
+        <form method="POST" action="/patient/login" class="modern-form">
+            <div class="form-group">
+                <label>Patient ID</label>
+                <input type="text" name="patient_id" required>
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="patient_name" required>
+            </div>
+
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn-primary">Access My Report</button>
+        </form>
+
+        <div style="margin-top:20px; text-align:center;">
+            <a href="/login">← Back to Doctor Login</a>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

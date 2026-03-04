@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NeuroXAI Care</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Google Fonts for Medical Professionalism -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
+
+    <header class="main-header">
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='L.PNG') }}" alt="NeuroXAI Logo" class="brand-logo">
+            <button class="mode-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                <span class="icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="auth-container">
+        <section class="auth-card" id="login-section">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Please enter your credentials to access the clinical portal</p>
+            </div>
+
+            <form method="POST" action="/login" class="modern-form">
+                <div class="form-group">
+                <label for="username">Username or Email </label> 
+                <input type="text" id="username" name="username_or_email" placeholder="Username / Email / Phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                {% if error %}
+                <div class="error-message">
+                    <span class="error-icon">⚠️</span>
+                    <p>{{ error }}</p>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn-primary">Sign In to Portal</button>
+            </form>
+            <hr style="margin:25px 0; opacity:0.3;">
+
+<div style="text-align:center;">
+    <p style="margin-bottom:10px; font-weight:500;">Are you a patient?</p>
+    <a href="/patient/login">
+        <button type="button" class="btn-secondary">👤 Patient Login</button>
+    </a>
+</div>
+
+            <div class="auth-footer-links">
+                <p>Don't have an account? <a href="/signup">Create medical profile</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>Contact Support:</h3>
+                <a href="mailto:support@neuroxai.care" class="contact-link">
+                    <span id="email-text">support@neuroxai.care</span>
+                </a>
+            </div>
+            <p class="copyright">&copy; 2026 NeuroXAI Care. Advanced Neurological Diagnostics.</p>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        function toggleMode() {
+            body.classList.toggle("dark-mode");
+            const isDark = body.classList.contains("dark-mode");
+            
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            themeToggle.querySelector('.icon').textContent = isDark ? "☀️" : "🌙";
+        }
+
+        themeToggle.addEventListener('click', toggleMode);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                body.classList.add("dark-mode");
+                themeToggle.querySelector('.icon').textContent = "☀️";
+            }
+        });
+    </script>
+</body>
+</html>
