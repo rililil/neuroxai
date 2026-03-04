@@ -25,7 +25,7 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT
 app = Flask(__name__)
 app.secret_key = "change_this_secret_key_to_something_more_secure"
 
-USERS_DB_PATH = "users_auth.json"
+USERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "users_auth.json")
 PATIENTS_DB_PATH = "patients.db"
 
 # Initialize SQLite database for patient records
@@ -51,11 +51,10 @@ def init_db():
 init_db()
 
 def load_users():
-    if not os.path.exists(USERS_DB_PATH):
+    if not os.path.exists(USERS_FILE):
         return {}
-    with open(USERS_DB_PATH, "r", encoding="utf-8") as f:
-        try:
-            return json.load(f)
+    with open(USERS_FILE) as f:
+        return json.load(f)
         except Exception:
             return {}
 
