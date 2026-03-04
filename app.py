@@ -60,9 +60,11 @@ def load_users():
         return {}
 
 def save_users(users):
-    with open(USERS_DB_PATH, "w", encoding="utf-8") as f:
-        json.dump(users, f, ensure_ascii=False, indent=2)
-
+    try:
+        with open(USERS_FILE, "w", encoding="utf-8") as f:
+            json.dump(users, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 def login_required(view_func):
     @wraps(view_func)
     def wrapped(*args, **kwargs):
