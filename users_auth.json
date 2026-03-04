@@ -1,0 +1,29 @@
+{
+  "Atheer": {
+    "email": "AtheerAshraf123@gmail.com",
+    "password": "scrypt:32768:8:1$xjdJkCJO2aOzt8wC$30059dde41146397176fa4e84e2b7cb217cccaeb5a1eef90ca842304e8a45bbf215655c5c6f3ada0eb1080ef749011d82001dd79fcaeaeb6e5fa9e0a0ca6a786"
+  },
+  "Raghad.22": {
+    "email": "Fajer.55433@gmail.com",
+    "password": "scrypt:32768:8:1$HujCmc7VPKlevhdJ$5ce2060a9c8fd8b97df8aa88b51e8ba2b246884e16219c60205fd9f3a90e96a3427849fa50b813e0fccd90be8bdd01d8253d8d953b1b42f92c81e404175909d7"
+  },
+  "Raghad.223": {
+    "email": "Fajer.554334@gmail.com",
+    "password": "scrypt:32768:8:1$CswXaP8iATs8oZU6$c11ebe693161f4845a519626e6652990b5d86bb5adc41722236d22bf298fd5c791dab4fa5a90f13da00907f83c3a812eaaa6c04ddb08b1c520b194551f915665"
+  },
+  "Raghad.2233": {
+    "email": "Fajer.554333@gmail.com",
+    "phone": "0550383457",
+    "password": "scrypt:32768:8:1$BUflruchkfednaPT$38b3e5d28835f6b2bc7ffd465a3810056c31dbfe19b97dd967a0e8d868cfcbe5a2ed62e90135ce1bc67caae3da7d31d2829bd61a82fcfe580309356a2cd35840"
+  },
+  "basmaha": {
+    "email": "basmaha771@gmail.com",
+    "phone": "501387558",
+    "password": "scrypt:32768:8:1$u3yIkLGtEwUebnVW$b648019be30b02ca9cef8b2f47d000c044e76082d06404ad8e799b6b880756903d39c27afa7635b86d36f082e7d864f7e5a3c849769d74f808107e2bfda2f24d"
+  },
+  "retaj": {
+    "email": "retajturki.77@gmail.com",
+    "phone": "0503474914",
+    "password": "scrypt:32768:8:1$rCJoal8i0cXBI0Nk$0b1f10b3a4d56aaccd05acf22de1b790ee95aa0ef240b0e340e910f35870b607e12a322c58a792fdf4221382d8bcb2fc8dacd1e68879ad7005548a50ca11f1dd"
+  }
+}
