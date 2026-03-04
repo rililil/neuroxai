@@ -53,10 +53,11 @@ init_db()
 def load_users():
     if not os.path.exists(USERS_FILE):
         return {}
-    with open(USERS_FILE) as f:
-        return json.load(f)
-        except Exception:
-            return {}
+    try:
+        with open(USERS_FILE) as f:
+            return json.load(f)
+    except Exception:
+        return {}
 
 def save_users(users):
     with open(USERS_DB_PATH, "w", encoding="utf-8") as f:
